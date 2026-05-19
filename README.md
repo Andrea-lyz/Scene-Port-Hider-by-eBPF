@@ -1,11 +1,11 @@
 # Scene Port Hider by eBPF
 
-这是一个 KernelSU 模块，用来隐藏 Scene 常用 TCP 端口 `8788` 和 `8765` 的端口探测。
+这是一个 KernelSU 模块，用来隐藏 Scene 常用 TCP 端口 `8788`和`8765` 的端口探测。
 
 模块使用 eBPF 在内核侧做端口行为隐藏，当前覆盖：
 
-- `connect()` 型探测：使用 `cgroup/connect4` 和 `cgroup/connect6` 将非白名单应用对目标端口的本机连接重定向到无服务端口。
-- `bind()` 型探测：使用 `cgroup/bind4` 和 `cgroup/bind6` 将非白名单应用对目标端口的本机绑定临时改为随机端口。
+- `connect()` 型探测：使用 `cgroup/connect4`和`cgroup/connect6` 将非白名单应用对目标端口的本机连接重定向到无服务端口。
+- `bind()` 型探测：使用 `cgroup/bind4`和`cgroup/bind6` 将非白名单应用对目标端口的本机绑定临时改为随机端口。
 - `bind + getsockname()` 一致性探测：用 kprobe/kretprobe 按 `tgid + fd` 记录原始端口，多次 `getsockname(fd)` 都回填一致结果，并在 `close(fd)` 时清理状态。
 
 模块不使用 `iptables` / `ip6tables`，也不再依赖 `service.d` 脚本。
